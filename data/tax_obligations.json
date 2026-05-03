@@ -1,0 +1,134 @@
+[
+  {
+    "id": "TAX-001",
+    "obligation_type": "TDS",
+    "sub_type": "Section 194C - Contractor Payments",
+    "due_date": "2026-05-07",
+    "filed_status": "pending",
+    "amount_due_inr": 18400,
+    "penalty_triggered": "N",
+    "responsible_party": "DesignCo Agency",
+    "notes": "TDS deducted from April contractor invoice; deposit overdue"
+  },
+  {
+    "id": "TAX-002",
+    "obligation_type": "TDS",
+    "sub_type": "Section 194J - Professional Services",
+    "due_date": "2026-04-07",
+    "filed_status": "pending",
+    "amount_due_inr": 22000,
+    "penalty_triggered": "Y",
+    "responsible_party": "LegalEdge Retainer",
+    "notes": "March TDS not deposited; 26 days overdue; interest accruing"
+  },
+  {
+    "id": "TAX-003",
+    "obligation_type": "TDS",
+    "sub_type": "24Q - Salary TDS",
+    "due_date": "2026-05-31",
+    "filed_status": "pending",
+    "amount_due_inr": 95000,
+    "penalty_triggered": "N",
+    "responsible_party": "All Employees",
+    "notes": "Q4 FY26 TDS return filing due end of May"
+  },
+  {
+    "id": "TAX-004",
+    "obligation_type": "GST",
+    "sub_type": "GSTR-3B",
+    "due_date": "2026-05-20",
+    "filed_status": "pending",
+    "amount_due_inr": 67500,
+    "penalty_triggered": "N",
+    "responsible_party": "Internal",
+    "notes": "April GSTR-3B due 20th May; 17 days remaining"
+  },
+  {
+    "id": "TAX-005",
+    "obligation_type": "GST",
+    "sub_type": "GSTR-1",
+    "due_date": "2026-05-11",
+    "filed_status": "pending",
+    "amount_due_inr": 0,
+    "penalty_triggered": "N",
+    "responsible_party": "Internal",
+    "notes": "April GSTR-1 outward supply return; due in 8 days"
+  },
+  {
+    "id": "TAX-006",
+    "obligation_type": "GST",
+    "sub_type": "ITC Reconciliation",
+    "due_date": "2026-05-20",
+    "filed_status": "mismatch",
+    "amount_due_inr": 14200,
+    "penalty_triggered": "N",
+    "responsible_party": "PR Firm Retainer",
+    "notes": "Vendor GSTR-1 not filed for March invoice; ITC claim at risk"
+  },
+  {
+    "id": "TAX-007",
+    "obligation_type": "PF",
+    "sub_type": "EPF Monthly Contribution",
+    "due_date": "2026-04-15",
+    "filed_status": "pending",
+    "amount_due_inr": 38400,
+    "penalty_triggered": "Y",
+    "responsible_party": "All PF-enrolled Employees",
+    "notes": "April PF contribution not deposited; 18 days overdue; damages accruing at 12% p.a."
+  },
+  {
+    "id": "TAX-008",
+    "obligation_type": "PF",
+    "sub_type": "EPF Monthly Contribution",
+    "due_date": "2026-05-15",
+    "filed_status": "pending",
+    "amount_due_inr": 38400,
+    "penalty_triggered": "N",
+    "responsible_party": "All PF-enrolled Employees",
+    "notes": "May PF contribution due in 12 days; not yet initiated"
+  },
+  {
+    "id": "TAX-009",
+    "obligation_type": "ESI",
+    "sub_type": "ESI Monthly Contribution",
+    "due_date": "2026-04-21",
+    "filed_status": "pending",
+    "amount_due_inr": 9600,
+    "penalty_triggered": "Y",
+    "responsible_party": "ESI-eligible Employees",
+    "notes": "April ESI not deposited; 12 days overdue"
+  },
+  {
+    "id": "TAX-010",
+    "obligation_type": "TDS",
+    "sub_type": "26Q - Non-Salary TDS Return",
+    "due_date": "2026-05-31",
+    "filed_status": "pending",
+    "amount_due_inr": 0,
+    "penalty_triggered": "N",
+    "responsible_party": "Internal",
+    "notes": "Q4 FY26 non-salary TDS return; ₹200/day late fee if missed"
+  },
+  {
+    "id": "TAX-011",
+    "obligation_type": "GST",
+    "sub_type": "GSTR-3B",
+    "due_date": "2026-04-20",
+    "filed_status": "filed",
+    "amount_due_inr": 0,
+    "penalty_triggered": "N",
+    "responsible_party": "Internal",
+    "notes": "March GSTR-3B filed on time. No action needed."
+  },
+  {
+    "id": "TAX-012",
+    "obligation_type": "Advance Tax",
+    "sub_type": "Instalment 1 - FY27",
+    "due_date": "2026-06-15",
+    "filed_status": "pending",
+    "amount_due_inr": 120000,
+    "penalty_triggered": "N",
+    "responsible_party": "Internal",
+    "notes": "First advance tax instalment FY27; 43 days away; planning required"
+  }
+]

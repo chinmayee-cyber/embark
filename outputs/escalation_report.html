@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Financial Escalation Report &middot; 2026-05-03</title>
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --surface: #ffffff;
+    --ink: #0f172a;
+    --ink-soft: #475569;
+    --ink-mute: #94a3b8;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --critical: #b91c1c;
+    --critical-bg: #fee2e2;
+    --critical-border: #fecaca;
+    --medium: #b45309;
+    --medium-bg: #fef3c7;
+    --medium-border: #fde68a;
+    --low: #475569;
+    --low-bg: #f1f5f9;
+    --low-border: #e2e8f0;
+    --accent: #1e293b;
+    --positive: #047857;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                 "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 40px 56px;
+  }
+
+  /* ── Header ────────────────────────────────────────────── */
+  header.report-head {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 11px;
+    color: var(--ink-mute);
+    font-weight: 600;
+  }
+  h1 {
+    font-size: 26px;
+    margin: 6px 0 4px;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+  .meta {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--ink-mute);
+  }
+
+  /* ── Section ───────────────────────────────────────────── */
+  section { margin: 28px 0; }
+  h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+
+  /* ── KPI grid ──────────────────────────────────────────── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .kpi .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+    font-weight: 600;
+  }
+  .kpi .value {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 6px;
+    letter-spacing: -0.01em;
+  }
+  .kpi.critical .value { color: var(--critical); }
+  .kpi.medium .value { color: var(--medium); }
+
+  /* ── Severity strip ────────────────────────────────────── */
+  .pill-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid;
+  }
+  .pill.critical { background: var(--critical-bg); border-color: var(--critical-border); color: var(--critical); }
+  .pill.medium { background: var(--medium-bg); border-color: var(--medium-border); color: var(--medium); }
+  .pill.low { background: var(--low-bg); border-color: var(--low-border); color: var(--low); }
+  .pill .count {
+    background: rgba(0,0,0,0.08);
+    border-radius: 999px;
+    padding: 1px 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Two-column tables ─────────────────────────────────── */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  table.breakdown {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  table.breakdown th, table.breakdown td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  table.breakdown thead th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+    background: #fafbfd;
+    font-weight: 600;
+  }
+  table.breakdown tbody tr:last-child td { border-bottom: none; }
+  table.breakdown td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── Escalation cards ──────────────────────────────────── */
+  .esc-list { display: flex; flex-direction: column; gap: 12px; }
+  .esc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .esc.critical { border-left-color: var(--critical); }
+  .esc.medium { border-left-color: var(--medium); }
+  .esc.low { border-left-color: var(--low); }
+
+  .esc-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .esc-title {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 15px;
+  }
+  .esc-id {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--ink-mute);
+    margin-right: 6px;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+    margin-left: 4px;
+  }
+  .badge.critical { color: var(--critical); background: var(--critical-bg); border-color: var(--critical-border); }
+  .badge.medium { color: var(--medium); background: var(--medium-bg); border-color: var(--medium-border); }
+  .badge.low { color: var(--low); background: var(--low-bg); border-color: var(--low-border); }
+  .badge.cross { color: #1d4ed8; background: #dbeafe; border-color: #bfdbfe; }
+  .badge.domain { color: var(--ink-soft); background: #f1f5f9; border-color: var(--border); }
+
+  .esc-desc {
+    margin: 10px 0 12px;
+    color: var(--ink);
+  }
+
+  .esc-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 10px 0 14px;
+    font-size: 12px;
+  }
+  .esc-meta .cell .k {
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 10.5px;
+    font-weight: 600;
+  }
+  .esc-meta .cell .v {
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .recommendation {
+    background: #fafbfd;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-top: 4px;
+  }
+  .recommendation .rk {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .recommendation .action {
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .recommendation .reasoning {
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+  .recommendation .api-error {
+    color: var(--critical);
+    font-size: 12px;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+  .linked {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .linked code {
+    background: #eef2f7;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin-right: 4px;
+    font-size: 11.5px;
+  }
+
+  /* ── Compact medium rows ───────────────────────────────── */
+  table.compact {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  table.compact th, table.compact td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.compact thead th {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+    background: #fafbfd;
+    font-weight: 600;
+  }
+  table.compact tbody tr:last-child td { border-bottom: none; }
+  table.compact td.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  table.compact td .src {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px;
+    color: var(--ink-mute);
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* ── Errors ────────────────────────────────────────────── */
+  .errors {
+    background: var(--critical-bg);
+    border: 1px solid var(--critical-border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: var(--critical);
+  }
+  .errors ul { margin: 8px 0 0; padding-left: 20px; }
+
+  /* ── Footer ────────────────────────────────────────────── */
+  footer.report-foot {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--ink-mute);
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ── Print ─────────────────────────────────────────────── */
+  @media print {
+    @page { size: A4; margin: 14mm 12mm; }
+    body { background: white; }
+    .page { padding: 0; max-width: none; }
+    .kpi, .esc, table.breakdown, table.compact, .recommendation, .errors {
+      box-shadow: none;
+    }
+    section { page-break-inside: avoid; }
+    .esc { page-break-inside: avoid; }
+    h2 { page-break-after: avoid; }
+  }
+
+  @media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .split { grid-template-columns: 1fr; }
+    .esc-meta { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="report-head">
+    <div class="eyebrow">Financial Escalation System</div>
+    <h1>Executive Escalation Report</h1>
+    <div class="subtitle">Detected anomalies, classified escalations, and recommended actions across recurring costs, tax obligations, and payroll.</div>
+    <div class="meta">
+      Run date: <strong>2026-05-03</strong>
+      &nbsp;&middot;&nbsp; Generated at: <strong>2026-05-03 23:42</strong>
+      &nbsp;&middot;&nbsp; Records processed: <strong>39</strong>
+    </div>
+  </header>
+
+  <section>
+    <h2>Executive Summary</h2>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="label">Records Processed</div>
+        <div class="value">39</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Anomalies Detected</div>
+        <div class="value">19</div>
+      </div>
+      <div class="kpi critical">
+        <div class="label">Critical</div>
+        <div class="value">8</div>
+      </div>
+      <div class="kpi medium">
+        <div class="label">Medium</div>
+        <div class="value">11</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Total Exposure</div>
+        <div class="value">Rs 4,55,000</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Severity Mix</h2>
+    <div class="pill-row">
+      <span class="pill critical">CRITICAL <span class="count">8</span></span>
+      <span class="pill medium">MEDIUM <span class="count">11</span></span>
+      <span class="pill low">LOW <span class="count">0</span></span>
+    </div>
+  </section>
+
+  <section class="split">
+    <div>
+      <h2>By Domain</h2>
+      <table class="breakdown">
+        <thead>
+          <tr><th>Domain</th><th class="num">Items</th><th class="num">Exposure</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Payroll</td>
+            <td class="num">7</td>
+            <td class="num">Rs 1,90,000</td>
+          </tr>
+          <tr>
+            <td>Recurring Costs</td>
+            <td class="num">8</td>
+            <td class="num">Rs 1,80,800</td>
+          </tr>
+          <tr>
+            <td>Tax</td>
+            <td class="num">4</td>
+            <td class="num">Rs 84,200</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h2>By Owner</h2>
+      <table class="breakdown">
+        <thead>
+          <tr><th>Owner</th><th class="num">Items</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Finance Lead</td>
+            <td class="num">16</td>
+          </tr>
+          <tr>
+            <td>Founder</td>
+            <td class="num">3</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Critical Escalations &middot; Action Required</h2>
+    <div class="esc-list">
+      <div class="esc critical">
+        <div class="esc-head">
+          <div class="esc-title">
+            <span class="esc-id">PR-002</span>
+            Pf Enrollment Missed
+            <span class="badge critical">Critical</span>
+            <span class="badge domain">Payroll</span>
+          </div>
+        </div>
+        <div class="esc-desc">Rohit Menon (employee, joined 2025-11-15) has not been enrolled in PF after 169 days. 30-day enrollment window missed.</div>
+        <div class="esc-meta">
+          <div class="cell"><div class="k">Owner</div><div class="v">Owner.FINANCE_LEAD</div></div>
+          <div class="cell"><div class="k">Deadline</div><div class="v">2026-05-03</div></div>
+          <div class="cell"><div class="k">Exposure</div><div class="v">Rs 0</div></div>
+          <div class="cell"><div class="k">SLA</div><div class="v">Immediate</div></div>
+        </div>
+        <div class="recommendation">
+          <div class="rk">Recommended Action</div>
+          <div class="action">Review required</div>
+          <div class="rk">Reasoning</div>
+          <div class="reasoning"></div>
+        </div>
+      </div>
+      <div class="esc critical">
+        <div class="esc-head">
+          <div class="esc-title">
+            <span class="esc-id">PR-005</span>
+            Pf Enrollment Missed
+            <span class="badge critical">Critical</span>
+            <span class="badge domain">Payroll</span>
+          </div>
+        </div>
+        <div class="esc-desc">Sneha Pillai (employee, joined 2026-03-01) has not been enrolled in PF after 63 days. 30-day enrollment window missed.</div>
+        <div class="esc-meta">
+          <div class="cell"><div class="k">Owner</div><div class="v">Owner.FINANCE_LEAD</div></div>
+          <div class="cell"><div class="k">Deadline</div><div class="v">2026-05-03</div></div>
+          <div class="cell"><div class="k">Exposure</div><div class="v">Rs 0</div></div>
+          <div class="cell"><div class="k">SLA</div><div class="v">Immediate</div></div>
+        </div>
+        <div class="recommendation">
+          <div class="rk">Recommended Action</div>
+          <div class="action">Review required</div>
+          <div class="rk">Reasoning</div>
+          <div class="reasoning"></div>
+        </div>
+      </div>
+      <div class="esc critical">
+        <div class="esc-head">
+          <div class="esc-title">
+            <span class="esc-id">PR-008</span>
+            Ffs Delayed
+            <span class="badge critical">Critical</span>
+            <span class="badge domain">Payroll</span>
+          </div>
+        </div>
+        <div class="esc-desc">Arjun Kapoor&#39;s full &amp; final settlement is overdue by 3 days since last working date 2026-03-31.</div>
+        <div class="esc-meta">
+          <div class="cell"><div class="k">Owner</div><div class="v">Owner.FINANCE_LEAD</div></div>
+          <div class="cell"><div class="k">Deadline</div><div class="v">2026-05-03</div></div>
+          <div class="cell"><div class="k">Exposure</div><div class="v">Rs 72,000</div></div>
+          <div class="cell"><div class="k">SLA</div><div class="v">Immediate</div></div>
+        </div>
+        <div class="recommendation">
+          <div class="rk">Recommended Action</div>
+          <div class="action">Review required</div>
+          <div class="rk">Reasoning</div>
+          <div class="reasoning"></div>
+        </div>
+      </div>
+      <div class="esc critical">
+        <div class="esc-head">
+          <div class="esc-title">
+            <span class="esc-id">PR-011</span>
+            Ffs Delayed
+            <span class="badge critical">Critical</span>
+            <span class="badge domain">Payroll</span>
+          </div>
+        </div>
+        <div class="esc-desc">Tanvi Shah&#39;s full &amp; final settlement is overdue by 3 days since last working date 2026-03-31.</div>
+        <div class="esc-meta">
+          <div class="cell"><div class="k">Owner</div><div class="v">Owner.FINANCE_LEAD</div></div>
+          <div class="cell"><div class="k">Deadline</div><div class="v">2026-05-03</div></div>
+          <div class="cell"><div class="k">Exposure</div><div class="v">Rs 55,000</div></div>
+          <div class="cell"><div class="k">SLA</div><div class="v">Immediate</div></div>
+        </div>
+        <div class="recommendation">
+          <div class="rk">Recommended Action</div>
+          <div class="action">Review required</div>
+          <div class="rk">Reasoning</div>
+          <div class="reasoning"></div>
+        </div>
+      </div>
+      <div class="esc critical">
+        <div class="esc-head">
+          <div class="esc-title">
+            <span class="esc-id">PR-012</span>
+            Pf Enrollment Missed
+            <span class="badge critical">Critical</span>
+            <span class="badge domain">Payroll</span>
+          </div>
+        </div>
+        <div class="esc-desc">Nikhil Rao (employee, joined 2026-04-01) has not been enrolled in PF after 32 days. 30-day enrollment window missed.</div>
+        <div class="esc-meta">
+          <div class="cell"><div class="k">Owner</div><div class="v">Owner.FINANCE_LEAD</div></div>
+          <div class="cell"><div class="k">Deadline</div><div class="v">2026-05-03</div></div>
+          <div class="cell"><div class="k">Exposure</div><div class="v">Rs 0</div></div>
+          <div class="cell"><div class="k">SLA</div><div class="v">Immediate</div></div>
+        </div>
+        <div class="recommendation">
+          <div class="rk">Recommended Action</div>
+          <div class="action">Review required</div>
+          <div class="rk">Reasoning</div>
+          <div class="reasoning"></div>
+        </div>
+      </div>
+      <div class="esc critical">
+        <div class="esc-head">
+          <div class="esc-title">
+            <span class="esc-id">TAX-002</span>
+            Penalty Triggered
+            <span class="badge critical">Critical</span>
+            <span class="badge domain">Tax</span>
+          </div>
+        </div>
+        <div class="esc-desc">TDS (Section 194J - Professional Services) for LegalEdge Retainer has an active penalty. Overdue by 26 days. Amount: ₹22,000.</div>
+        <div class="esc-meta">
+          <div class="cell"><div class="k">Owner</div><div class="v">Owner.FOUNDER</div></div>
+          <div class="cell"><div class="k">Deadline</div><div class="v">2026-05-03</div></div>
+          <div class="cell"><div class="k">Exposure</div><div class="v">Rs 22,000</div></div>
+          <div class="cell"><div class="k">SLA</div><div class="v">Immediate</div></div>
+        </div>
+        <div class="recommendation">
+          <div class="rk">Recommended Action</div>
+          <div class="action">Review required</div>
+          <div class="rk">Reasoning</div>
+          <div class="reasoning"></div>
+        </div>
+      </div>
+      <div class="esc critical">
+        <div class="esc-head">
+          <div class="esc-title">
+            <span class="esc-id">TAX-007</span>
+            Penalty Triggered
+            <span class="badge critical">Critical</span>
+            <span class="badge domain">Tax</span>
+          </div>
+        </div>
+        <div class="esc-desc">PF (EPF Monthly Contribution) for All PF-enrolled Employees has an active penalty. Overdue by 18 days. Amount: ₹38,400.</div>
+        <div class="esc-meta">
+          <div class="cell"><div class="k">Owner</div><div class="v">Owner.FOUNDER</div></div>
+          <div class="cell"><div class="k">Deadline</div><div class="v">2026-05-03</div></div>
+          <div class="cell"><div class="k">Exposure</div><div class="v">Rs 38,400</div></div>
+          <div class="cell"><div class="k">SLA</div><div class="v">Immediate</div></div>
+        </div>
+        <div class="recommendation">
+          <div class="rk">Recommended Action</div>
+          <div class="action">Review required</div>
+          <div class="rk">Reasoning</div>
+          <div class="reasoning"></div>
+        </div>
+      </div>
+      <div class="esc critical">
+        <div class="esc-head">
+          <div class="esc-title">
+            <span class="esc-id">TAX-009</span>
+            Penalty Triggered
+            <span class="badge critical">Critical</span>
+            <span class="badge domain">Tax</span>
+          </div>
+        </div>
+        <div class="esc-desc">ESI (ESI Monthly Contribution) for ESI-eligible Employees has an active penalty. Overdue by 12 days. Amount: ₹9,600.</div>
+        <div class="esc-meta">
+          <div class="cell"><div class="k">Owner</div><div class="v">Owner.FOUNDER</div></div>
+          <div class="cell"><div class="k">Deadline</div><div class="v">2026-05-03</div></div>
+          <div class="cell"><div class="k">Exposure</div><div class="v">Rs 9,600</div></div>
+          <div class="cell"><div class="k">SLA</div><div class="v">Immediate</div></div>
+        </div>
+        <div class="recommendation">
+          <div class="rk">Recommended Action</div>
+          <div class="action">Review required</div>
+          <div class="rk">Reasoning</div>
+          <div class="reasoning"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Medium Escalations</h2>
+    <table class="compact">
+      <thead>
+        <tr>
+          <th>Issue</th>
+          <th>Domain</th>
+          <th>Owner</th>
+          <th>Deadline</th>
+          <th>Action</th>
+          <th class="num">Exposure</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Priya Nair (contractor) earns ₹28,000/month, above ESI threshold of ₹21,000. ESI not being applied.
+            <span class="src">PR-003</span>
+          </td>
+          <td><span class="badge domain">Payroll</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 28,000</td>
+        </tr>
+        <tr>
+          <td>
+            Sameer Iyer (contractor) earns ₹35,000/month, above ESI threshold of ₹21,000. ESI not being applied.
+            <span class="src">PR-010</span>
+          </td>
+          <td><span class="badge domain">Payroll</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 35,000</td>
+        </tr>
+        <tr>
+          <td>
+            Notion (SaaS / Productivity) is unused, auto-renewing, and has no owner. Monthly cost: ₹8,500.
+            <span class="src">RC-001</span>
+          </td>
+          <td><span class="badge domain">Recurring Costs</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 8,500</td>
+        </tr>
+        <tr>
+          <td>
+            Zoom (SaaS / Communication) is unused, auto-renewing, and has no owner. Monthly cost: ₹6,200.
+            <span class="src">RC-003</span>
+          </td>
+          <td><span class="badge domain">Recurring Costs</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 6,200</td>
+        </tr>
+        <tr>
+          <td>
+            SEMrush (SaaS / Marketing) is unused, auto-renewing, and has no owner. Monthly cost: ₹11,500.
+            <span class="src">RC-005</span>
+          </td>
+          <td><span class="badge domain">Recurring Costs</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 11,500</td>
+        </tr>
+        <tr>
+          <td>
+            DesignCo Agency (Vendor Retainer) is unused, auto-renewing, and has no owner. Monthly cost: ₹55,000.
+            <span class="src">RC-006</span>
+          </td>
+          <td><span class="badge domain">Recurring Costs</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 55,000</td>
+        </tr>
+        <tr>
+          <td>
+            Freshdesk (SaaS / Support) is unused, auto-renewing, and has no owner. Monthly cost: ₹7,400.
+            <span class="src">RC-008</span>
+          </td>
+          <td><span class="badge domain">Recurring Costs</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 7,400</td>
+        </tr>
+        <tr>
+          <td>
+            Mailchimp (SaaS / Email) is unused, auto-renewing, and has no owner. Monthly cost: ₹5,200.
+            <span class="src">RC-011</span>
+          </td>
+          <td><span class="badge domain">Recurring Costs</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 5,200</td>
+        </tr>
+        <tr>
+          <td>
+            PR Firm Retainer (Vendor Retainer) is unused, auto-renewing, and has no owner. Monthly cost: ₹75,000.
+            <span class="src">RC-012</span>
+          </td>
+          <td><span class="badge domain">Recurring Costs</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 75,000</td>
+        </tr>
+        <tr>
+          <td>
+            Mixpanel (SaaS / Analytics) is unused, auto-renewing, and has no owner. Monthly cost: ₹12,000.
+            <span class="src">RC-014</span>
+          </td>
+          <td><span class="badge domain">Recurring Costs</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 12,000</td>
+        </tr>
+        <tr>
+          <td>
+            GST ITC mismatch detected for PR Firm Retainer. ITC claim at risk: ₹14,200.
+            <span class="src">TAX-006</span>
+          </td>
+          <td><span class="badge domain">Tax</span></td>
+          <td>Owner.FINANCE_LEAD</td>
+          <td>2026-05-03</td>
+          <td>Review required</td>
+          <td class="num">Rs 14,200</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+
+
+  <footer class="report-foot">
+    <div>Financial Escalation Detection System</div>
+    <div>API calls made: 19 &middot; Generated 2026-05-03 23:42</div>
+  </footer>
+
+</div>
+</body>
+</html>
