@@ -18,7 +18,7 @@ The pipeline is deterministic for detection and classification, with AI only use
 1. Clone the repository and navigate to the project directory.
 2. Create a virtual environment: `python -m venv .venv` (activate with `.venv\Scripts\activate` on Windows or `source .venv/bin/activate` on macOS/Linux).
 3. Install dependencies: `pip install -e ".[dev]"`.
-4. Set up environment variables: Copy `.env.example` to `.env` and add your `GOOGLE_API_KEY` or `GEMINI_API_KEY` for AI recommendations.
+4. Set up environment variables: Create `.env` and add your `GOOGLE_API_KEY` or `GEMINI_API_KEY` for AI recommendations.
 
 ### Usage
 Run the pipeline with: `python src/pipeline/run_pipeline.py`.  
